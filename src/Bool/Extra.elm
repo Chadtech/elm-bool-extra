@@ -1,0 +1,3 @@
+module Bool.Extra
+    exposing
+        (..)
