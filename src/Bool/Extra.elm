@@ -11,7 +11,7 @@ module Bool.Extra
 
 # Basics
 
-@docs all, none, some, notAll
+@docs all, none, any, notAll
 
 -}
 
