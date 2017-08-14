@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "List.Extra Test Suite",
-    "repository": "https://github.com/chadtech/elm-bool-extra.git",
+    "repository": "https://github.com/Chadtech/elm-bool-extra.git",
     "license": "MIT",
     "source-directories": [
         ".",
