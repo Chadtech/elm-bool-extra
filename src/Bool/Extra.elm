@@ -15,6 +15,10 @@ module Bool.Extra
 
 @docs all, none, any, notAll
 
+# Predicate
+
+@docs allPass, anyPass
+
 -}
 
 
@@ -39,7 +43,7 @@ all =
 -}
 none : List Bool -> Bool
 none =
-    List.all (identity >> not)
+    List.all not
 
 
 {-| At least one of the bools is true.
