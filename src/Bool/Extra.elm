@@ -1,11 +1,12 @@
 module Bool.Extra
     exposing
         ( all
-        , none
-        , any
-        , notAll
         , allPass
+        , any
         , anyPass
+        , ternary
+        , none
+        , notAll
         )
 
 {-| Convenience functions for working with Bools
@@ -14,6 +15,12 @@ module Bool.Extra
 # Basics
 
 @docs all, none, any, notAll
+
+
+# Util
+
+@docs conditional
+
 
 # Predicate
 
@@ -68,6 +75,37 @@ any =
 notAll : List Bool -> Bool
 notAll =
     all >> not
+
+
+{-| A substitue for the "if" statement that can be used in one line, much like the conditional operator in Javascript
+
+    columnStyle : Maybe Int -> Int -> List (Attribute Msg)
+    columnStyle selectedColumn thisColumn =
+        selectedColumn
+            |> Maybe.map ((==) thisColumn)
+            |> Maybe.withDefault False
+            |> ternary column.focus NoFocus
+            |> focusStyle
+
+    focusStyle : Column.Focus -> List (Attribute Msg)
+    focusStyle focus =
+        case focus of
+            NoFocus ->
+                []
+
+            People ->
+                [ class "people-focused" ]
+
+            Prices ->
+                [ class "prices-focused" ]
+
+-}
+ternary : a -> a -> Bool -> a
+ternary a b condition =
+    if condition then
+        a
+    else
+        b
 
 
 {-| Determine if all predicates are satisfied by the value.
