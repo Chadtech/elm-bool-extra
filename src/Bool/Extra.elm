@@ -1,6 +1,7 @@
 module Bool.Extra exposing
     ( all, none, any, notAll
     , allPass, anyPass
+    , toString
     )
 
 {-| Convenience functions for working with Bools
@@ -15,7 +16,21 @@ module Bool.Extra exposing
 
 @docs allPass, anyPass
 
+
+# Util
+
+@docs toString
+
 -}
+
+
+toString : Bool -> String
+toString bool =
+    if bool then
+        "True"
+
+    else
+        "False"
 
 
 {-| All the bools are true.
