@@ -24,6 +24,13 @@ module Bool.Extra exposing
 -}
 
 
+{-| Turn a bool into a string
+
+    toString True == "True"
+
+    toString False == "False"
+
+-}
 toString : Bool -> String
 toString bool =
     if bool then
