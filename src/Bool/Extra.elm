@@ -1,8 +1,8 @@
 module Bool.Extra exposing
     ( all, none, any, notAll
     , allPass, anyPass
-    , toString
     , toMaybe
+    , toString
     )
 
 {-| Convenience functions for working with Bools
@@ -20,7 +20,7 @@ module Bool.Extra exposing
 
 # Maybe
 
-toMaybe
+@docs toMaybe
 
 
 # Util
