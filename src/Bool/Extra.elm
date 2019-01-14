@@ -2,6 +2,7 @@ module Bool.Extra exposing
     ( all, none, any, notAll
     , allPass, anyPass
     , toString
+    , toMaybe
     )
 
 {-| Convenience functions for working with Bools
@@ -17,6 +18,11 @@ module Bool.Extra exposing
 @docs allPass, anyPass
 
 
+# Maybe
+
+toMaybe
+
+
 # Util
 
 @docs toString
@@ -24,11 +30,31 @@ module Bool.Extra exposing
 -}
 
 
+{-| Take a value, and wrap it with `Just` from a `Bool`
+
+    toMaybe 4 True
+    --> Just 4
+
+    toMaybe 4 False
+    --> Nothing
+
+-}
+toMaybe : a -> Bool -> Maybe a
+toMaybe v bool =
+    if bool then
+        Just v
+
+    else
+        Nothing
+
+
 {-| Turn a bool into a string
 
-    toString True == "True"
+    toString True
+    --> "True"
 
-    toString False == "False"
+    toString False
+    --> "False"
 
 -}
 toString : Bool -> String
@@ -42,11 +68,14 @@ toString bool =
 
 {-| All the bools are true.
 
-    all [ True, True ] == True
+    all [ True, True ]
+    --> True
 
-    all [ True, False ] == False
+    all [ True, False ]
+    --> False
 
-    all [ False, False ] == False
+    all [ False, False ]
+    --> False
 
 -}
 all : List Bool -> Bool
@@ -56,11 +85,14 @@ all =
 
 {-| None of the bools are true.
 
-    none [ True, True ] == False
+    none [ True, True ]
+    --> False
 
-    none [ True, False ] == False
+    none [ True, False ]
+    --> False
 
-    none [ False, False ] == True
+    none [ False, False ]
+    --> True
 
 -}
 none : List Bool -> Bool
@@ -70,11 +102,14 @@ none =
 
 {-| At least one of the bools is true.
 
-    any [ True, True ] == True
+    any [ True, True ]
+    --> True
 
-    any [ True, False ] == True
+    any [ True, False ]
+    --> True
 
-    any [ False, False ] == False
+    any [ False, False ]
+    --> False
 
 -}
 any : List Bool -> Bool
@@ -84,11 +119,14 @@ any =
 
 {-| Not all of them are true
 
-    notAll [ True, True ] == False
+    notAll [ True, True ]
+    --> False
 
-    notAll [ True, False ] == True
+    notAll [ True, False ]
+    --> True
 
-    notAll [ False, False ] == True
+    notAll [ False, False ]
+    --> True
 
 -}
 notAll : List Bool -> Bool
@@ -98,13 +136,17 @@ notAll =
 
 {-| Determine if all predicates are satisfied by the value.
 
-    allPass [ (>) 20, (<) 10 ] 11 == True
+    allPass [ (>) 20, (<) 10 ] 11
+    --> True
 
-    allPass [ (>) 20, (<) 10 ] 21 == False
+    allPass [ (>) 20, (<) 10 ] 21
+    --> False
 
-    allPass [ (>) 20, (<) 10 ] 4 == False
+    allPass [ (>) 20, (<) 10 ] 4
+    --> False
 
-    allPass [] 21 == True
+    allPass [] 21
+    --> True
 
 -}
 allPass : List (a -> Bool) -> a -> Bool
@@ -114,11 +156,14 @@ allPass ps x =
 
 {-| Determine if any predicate is satisfied by the value.
 
-    anyPass [ (>) 20, (<) 10 ] 100 == True
+    anyPass [ (>) 20, (<) 10 ] 100
+    --> True
 
-    anyPass [ (>) 20, (==) 10 ] 21 == False
+    anyPass [ (>) 20, (==) 10 ] 21
+    --> False
 
-    anyPass [] 21 == False
+    anyPass [] 21
+    --> False
 
 -}
 anyPass : List (a -> Bool) -> a -> Bool
