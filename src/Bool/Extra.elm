@@ -2,7 +2,7 @@ module Bool.Extra exposing
     ( all, none, any, notAll
     , allPass, anyPass
     , toMaybe
-    , toString
+    , toString, fromString, stringDecoder, encodeAsString
     )
 
 {-| Convenience functions for working with Bools
@@ -23,11 +23,14 @@ module Bool.Extra exposing
 @docs toMaybe
 
 
-# Util
+# String
 
-@docs toString
+@docs toString, fromString, stringDecoder, encodeAsString
 
 -}
+
+import Json.Decode as Decode exposing (Decoder)
+import Json.Encode as Encode
 
 
 {-| Take a value, and wrap it with `Just` from a `Bool`
@@ -66,9 +69,81 @@ toString bool =
         "False"
 
 
+{-| Try and extract a `Bool` from a `String`
+
+    fromString "true"
+    --> Just True
+
+    fromString "False"
+    --> Just False
+
+    fromString "t"
+    --> Nothing
+
+    fromString "My pal foot foot"
+    --> Nothing
+
+-}
+fromString : String -> Maybe Bool
+fromString str =
+    case String.toLower str of
+        "true" ->
+            Just True
+
+        "false" ->
+            Just False
+
+        _ ->
+            Nothing
+
+
+{-| Sometimes in weird unideal circumstances you need to encode `True` to `"true"` instead of just `true`.
+
+    import Json.Encode exposing (encode)
+
+    encode 0 (encodeAsString True)
+    --> "\"true\""
+
+    encode 0 (encodeAsString False)
+    --> "\"false\""
+
+-}
+encodeAsString : Bool -> Encode.Value
+encodeAsString =
+    Encode.string << String.toLower << toString
+
+
+{-| Sometimes webservers will return the unideal json of a string `"true"` rather than just the native boolean value `true`. This decoder decodes a string that looks like a `Bool`, into a `Bool`
+
+    import Json.Decode as Decode
+    import Json.Encode as Encode
+
+    Decode.decodeString stringDecoder "\"true\""
+    --> Ok True
+
+    Decode.decodeString stringDecoder "true"
+    --> Err (Decode.Failure "Expecting a STRING" (Encode.bool True))
+
+-}
+stringDecoder : Decoder Bool
+stringDecoder =
+    let
+        decoderFromString : String -> Decoder Bool
+        decoderFromString str =
+            case fromString str of
+                Just bool ->
+                    Decode.succeed bool
+
+                Nothing ->
+                    Decode.fail ("string is not \"true\" or \"false\" ->" ++ str)
+    in
+    Decode.string
+        |> Decode.andThen decoderFromString
+
+
 {-| All the bools are true.
 
-    all [ True, True ]
+    all [ True, True, True ]
     --> True
 
     all [ True, False ]
