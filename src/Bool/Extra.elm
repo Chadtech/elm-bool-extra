@@ -43,8 +43,8 @@ import Json.Encode as Encode
 
 -}
 toMaybe : a -> Bool -> Maybe a
-toMaybe v bool =
-    if bool then
+toMaybe v pred =
+    if pred then
         Just v
 
     else
@@ -61,8 +61,8 @@ toMaybe v bool =
 
 -}
 toString : Bool -> String
-toString bool =
-    if bool then
+toString pred =
+    if pred then
         "True"
 
     else
@@ -131,8 +131,8 @@ stringDecoder =
         decoderFromString : String -> Decoder Bool
         decoderFromString str =
             case fromString str of
-                Just bool ->
-                    Decode.succeed bool
+                Just pred ->
+                    Decode.succeed pred
 
                 Nothing ->
                     Decode.fail ("string is not \"true\" or \"false\" ->" ++ str)
