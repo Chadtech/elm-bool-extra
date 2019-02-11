@@ -244,3 +244,14 @@ allPass ps x =
 anyPass : List (a -> Bool) -> a -> Bool
 anyPass ps x =
     List.foldl (\p acc -> acc || p x) False ps
+
+{- | Reorder if-then-else syntax arguments.
+
+     bool 0 1 True
+     --> 1
+
+     bool 0 1 False
+     --> 0
+-}
+bool : a -> a -> Bool -> a
+bool x y p = if p then y else x
