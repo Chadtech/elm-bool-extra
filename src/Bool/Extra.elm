@@ -1,5 +1,5 @@
 module Bool.Extra exposing
-    ( all, none, any, notAll
+    ( all, none, any, notAll, ifElse
     , allPass, anyPass
     , toMaybe
     , toString, fromString, stringDecoder, encodeAsString
@@ -10,7 +10,7 @@ module Bool.Extra exposing
 
 # Basics
 
-@docs all, none, any, notAll
+@docs all, none, any, notAll, ifElse
 
 
 # Predicate
@@ -244,3 +244,21 @@ allPass ps x =
 anyPass : List (a -> Bool) -> a -> Bool
 anyPass ps x =
     List.foldl (\p acc -> acc || p x) False ps
+
+
+{-| Return the first argument if the given predicate is `True`. Otherwise, return the second argument.
+
+    ifElse "yes" "no" True
+    --> "yes"
+
+    ifElse "yes" "no" False
+    --> "no"
+
+-}
+ifElse : a -> a -> Bool -> a
+ifElse ifTrue ifFalse predicate =
+    if predicate then
+        ifTrue
+
+    else
+        ifFalse
