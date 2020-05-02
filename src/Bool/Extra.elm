@@ -33,13 +33,28 @@ import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
 
 
-{-| Take a value, and wrap it with `Just` from a `Bool`
+{-| Given a value `a` and a `Bool`, and wrap `a` in `Just` if the `Bool` is `True`.
 
     toMaybe 4 True
     --> Just 4
 
     toMaybe 4 False
     --> Nothing
+
+This kind of function is handy when populating lists..
+
+    [ Bool.Extra.toMaybe adminRoute (User.isAdmin user)
+    , Just dashboardRoute
+    , Bool.Extra.toMaybe profile (User.isLoggedIn user)
+    ]
+        |> List.filterMap identity
+
+..or when generating errors during form validation..
+
+    { field
+        | error =
+            Bool.Extra.toMaybe FieldIsEmpty (String.isEmpty field.value)
+    }
 
 -}
 toMaybe : a -> Bool -> Maybe a
@@ -152,6 +167,9 @@ stringDecoder =
     all [ False, False ]
     --> False
 
+    all []
+    --> True
+
 -}
 all : List Bool -> Bool
 all =
@@ -167,6 +185,9 @@ all =
     --> False
 
     none [ False, False ]
+    --> True
+
+    none []
     --> True
 
 -}
@@ -186,6 +207,9 @@ none =
     any [ False, False ]
     --> False
 
+    any []
+    --> False
+
 -}
 any : List Bool -> Bool
 any =
@@ -202,6 +226,9 @@ any =
 
     notAll [ False, False ]
     --> True
+
+    notAll []
+    --> False
 
 -}
 notAll : List Bool -> Bool
